@@ -7,7 +7,4 @@ class App(object):
     def get_hello_world(self):
         return "Hello, World"
 
-
-
-if __name__ == '__main__':
-    _get_hello_world()
+        

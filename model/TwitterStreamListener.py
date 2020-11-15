@@ -1,13 +1,42 @@
+import config
 import tweepy
+import os 
+from datetime import datetime
+from configparser import ConfigParser
 
-ACCESS_TOKEN='703575776936005632-FjYSE9jmQEhl6FGxaLQIp8KGm0N9rEf'
-ACCESS_SECRET='VFo08hhyYwJAI8A1QtEDXuZzTCHTkp8hyVNsSZvYFjfYw'
-CONSUMER_KEY='ATyQnHGDt5HoWbdC7geil8NgH'
-CONSUMER_SECRET='WcjCUT1T554qNuWfp50Kss4pcwY9txrV2hvPBrBuXN0SufzMJj'
+
+config_object = ConfigParser()
+config_object.read("config.ini")
+
+class TwitterStream(): 
+    
+    def __init__(self,keys):
+        self._ACCESS_TOKEN = None
+        self._ACCESS_SECRET = None
+        self._CONSUMER_KEY = None
+        self._CONSUMER_SECRET = None
+        self._keys = config_object["TWITTERAUTH"] 
+    
+    @property     
+    def ACCESS_TOKEN(self):
+        return self._keys ["ACCESS_TOKEN"]
+    
+    @property
+    def ACCESS_SECRET(self):
+        return self._keys["ACCESS_SECRET"]
+    
+    @property
+    def CONSUMER_KEY(self):
+        return self._keys["CONSUMER_KEY"]
+
+    @property
+    def CONSUMER_SECRET(self):
+        return self._keys["CONSUMER_SECRET"]
 
 def connect_to_twitter_OAuth():
-    auth = tweepy.OAuthHandler(CONSUMER_KEY,CONSUMER_SECRET)
-    auth.set_access_token(ACCESS_TOKEN,ACCESS_SECRET)
+    key = TwitterStream(config_object["TWITTERAUTH"])
+    auth = tweepy.OAuthHandler(key.CONSUMER_KEY,key.CONSUMER_SECRET)
+    auth.set_access_token(key.ACCESS_TOKEN,key.ACCESS_SECRET)
 
     api = tweepy.API(auth)
     return api 
@@ -15,18 +44,21 @@ def connect_to_twitter_OAuth():
 
 
 def processing_tweets():
-    keyword = "#covid19, #coronavirus, #vaccine"
+    keywords = "#covid19, #coronavirus, #vaccine" 
     api = connect_to_twitter_OAuth()
+    covid_date = datetime.today().strftime('%Y-%m-%d')
+    language = "en"
 
     public_tweets = tweepy.Cursor(api.search,
-                    q=keyword,
-                    lang="en",
-                    since="2020-06-01").items(50)
+                    q=keywords,
+                    lang=language,
+                    since=covid_date).items(5)
 
     for tweet in public_tweets:
         print(tweet.text)
 
 
-processing_tweets()
 
+if __name__ == '__main__':
+    processing_tweets()
 
