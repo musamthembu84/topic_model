@@ -3,7 +3,7 @@ import click
 import logging
 import sys
 
-from .application import App
+from .application  import App
 
 
 @click.command()

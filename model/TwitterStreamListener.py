@@ -12,8 +12,21 @@ def connect_to_twitter_OAuth():
     api = tweepy.API(auth)
     return api 
 
-api = connect_to_twitter_OAuth()
 
-public_tweets = api.home_timeline()
-for tweet in public_tweets:
-    print(tweet.text)
+
+def processing_tweets():
+    keyword = "#covid19, #coronavirus, #vaccine"
+    api = connect_to_twitter_OAuth()
+
+    public_tweets = tweepy.Cursor(api.search,
+                    q=keyword,
+                    lang="en",
+                    since="2020-06-01").items(50)
+
+    for tweet in public_tweets:
+        print(tweet.text)
+
+
+processing_tweets()
+
+
