@@ -3,6 +3,7 @@ import tweepy
 import os 
 from datetime import datetime
 from configparser import ConfigParser
+import socket
 
 
 config_object = ConfigParser()
@@ -60,5 +61,15 @@ def processing_tweets():
 
 
 if __name__ == '__main__':
-    processing_tweets()
+    #processing_tweets()
+    new_skt = socket.socket()
+    host = "127.0.0.1"
+    port = 5555
+    new_skt.bind((host,port))
+    
+    print("Now listening om port: %s" % str(port))
 
+    new_skt.listen(5)
+    c, addr = new_skt.accept()
+
+    print("Received request from:" + str(addr))
