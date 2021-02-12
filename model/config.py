@@ -9,6 +9,10 @@ config_object["TWITTERAUTH"] = {
     "CONSUMER_SECRET" : "WcjCUT1T554qNuWfp50Kss4pcwY9txrV2hvPBrBuXN0SufzMJj"
 }
 
+data(){
+    
+}
+
 with open('config.ini', 'w') as conf:
     config_object.write(conf)
 
