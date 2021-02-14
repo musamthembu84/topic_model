@@ -5,6 +5,6 @@ class App(object):
         pass
 
     def get_hello_world(self):
-        return "test data"
+        return "test"
 
         
